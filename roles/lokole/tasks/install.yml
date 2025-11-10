@@ -62,7 +62,7 @@
 - name: Set proper permissions on venv for nginx access
   file:
     path: "{{ lokole_venv }}/lib/python{{ python_version }}/site-packages/opwen_email_client/webapp"
-    mode: o+rx
+    mode: "0755"
     recurse: yes
     state: directory
 
