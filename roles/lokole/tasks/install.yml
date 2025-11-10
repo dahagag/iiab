@@ -78,7 +78,7 @@
     state: present
     name: "{{ lokole_user }}"
     #group: "{{ lokole_user }}"
-    groups: dialout, dip
+    groups: "{{ apache_user }}, dialout, dip"
     system: yes
     #uid: "{{ lokole_uid }}"
     home: "{{ lokole_home_dir }}"
