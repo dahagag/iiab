@@ -85,26 +85,46 @@
     state: present
     name: "{{ lokole_user }}"
     #group: "{{ lokole_user }}"
-    groups: "{{ apache_user }}, dialout, dip"
+    groups: "dialout, dip"
     system: yes
     #uid: "{{ lokole_uid }}"
     home: "{{ lokole_home_dir }}"
+- name: Add {{ apache_user }} to {{ lokole_user }} group for socket access
+  ansible.builtin.user:
+    name: "{{ apache_user }}"
+    groups: "{{ lokole_user }}"
+    append: yes
 
+- name: Set permissions on {{ lokole_home_dir }}
+  file:
+    path: "{{ lokole_home_dir }}"
+    owner: "{{ lokole_user }}"
+    group: "{{ lokole_user }}"
+    mode: "0750"
+    state: directory
 - name: mkdir {{ lokole_run_dir }}
   file:
     state: directory
-    path: "{{ lokole_run_dir }}/lokole_restarter"
-    group: "{{ lokole_user }}"
+    path: "{{ lokole_run_dir }}"
     owner: "{{ lokole_user }}"
-    mode: g+rw
+    group: "{{ lokole_user }}"
+    mode: "0750"
+
+- name: mkdir {{ lokole_run_dir }}/lokole_restarter
+  file:
+    state: directory
+    path: "{{ lokole_run_dir }}/lokole_restarter"
+    owner: "{{ lokole_user }}"
+    group: "{{ lokole_user }}"
+    mode: "0750"
 
 - name: mkdir {{ lokole_log_dir }}
   file:
     state: directory
     path: "{{ lokole_log_dir }}"
-    group: "{{ lokole_user }}"
     owner: "{{ lokole_user }}"
-    mode: g+rw
+    group: "{{ lokole_user }}"
+    mode: "0750"
 
 - name: Generate key and salt
   set_fact:
